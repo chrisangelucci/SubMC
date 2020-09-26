@@ -1,0 +1,5 @@
+name: SubMC
+main: submc.SubMC
+version: 1.0
+load: startup
+api-version: 1.16
