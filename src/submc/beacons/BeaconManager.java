@@ -12,6 +12,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 
 import submc.SubMC;
+import submc.utils.rays.Ray;
 
 public class BeaconManager {
 
@@ -47,6 +48,7 @@ public class BeaconManager {
 		}
 	}
 	
+	//TODO Change this to store holograms, and then teleport them on a short interval, for a seamless look.
 	private void displayBeacons() {
 		new BukkitRunnable() {
 			@Override
@@ -54,7 +56,7 @@ public class BeaconManager {
 				for(Player p : Bukkit.getOnlinePlayers()) {
 					for(BeaconPoint beacon : beacons) {
 						if(p.getEyeLocation().distanceSquared(beacon.getLocation()) < 100)continue;
-						Location bIcon = new Ray(p.getEyeLocation(), beacon.getLocation()).getPointOnRay(5);
+						Location bIcon = new Ray(p.getEyeLocation(), beacon.getLocation()).getPosition(5).toLocation(p.getWorld());
 						Hologram h = HologramsAPI.createHologram(plugin, bIcon);
 						h.getVisibilityManager().showTo(p);
 						h.getVisibilityManager().setVisibleByDefault(false);

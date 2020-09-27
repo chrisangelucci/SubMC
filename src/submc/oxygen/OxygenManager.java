@@ -1,6 +1,7 @@
 package submc.oxygen;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,27 +14,27 @@ public class OxygenManager {
 
 	private SubMC plugin;
 
-	private HashMap<String, Integer> oxygen;
+	private HashMap<UUID, Integer> oxygen;
 
 	public OxygenManager(SubMC plugin) {
 		this.plugin = plugin;
-		this.oxygen = new HashMap<String, Integer>();
+		this.oxygen = new HashMap<UUID, Integer>();
 		plugin.getServer().getPluginManager().registerEvents(new OxygenListener(), plugin);
 		startOxygen();
 	}
 
-	public HashMap<String, Integer> getOxygen(){
+	public HashMap<UUID, Integer> getOxygen(){
 		return this.oxygen;
 	}
 	
-	public void setOxygen(HashMap<String, Integer> oxygen) {
+	public void setOxygen(HashMap<UUID, Integer> oxygen) {
 		this.oxygen = oxygen;
 	}
 	
 	private int getOxygen(Player p) {
-		if(!oxygen.containsKey(p.getName()))
-			oxygen.put(p.getName(), getMaxOxygen(p));
-		return oxygen.get(p.getName());
+		if(!oxygen.containsKey(p.getUniqueId()))
+			oxygen.put(p.getUniqueId(), getMaxOxygen(p));
+		return oxygen.get(p.getUniqueId());
 	}
 	
 	private boolean removeOxygen(Player p, int amount) {
@@ -46,9 +47,10 @@ public class OxygenManager {
 	}
 	
 	private void setOxygen(Player p, int amount) {
-		oxygen.put(p.getName(), amount);
+		oxygen.put(p.getUniqueId(), amount);
 	}
 	
+	//TODO Allow this value to change using different oxygen tanks.
 	private int getMaxOxygen(Player p) {
 		return 45;
 	}

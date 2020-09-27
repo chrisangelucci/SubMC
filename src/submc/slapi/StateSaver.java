@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import submc.SubMC;
+import submc.base.Base;
 
 public class StateSaver {
 
@@ -36,6 +37,18 @@ public class StateSaver {
 		
 		try {
 			save(SubMC.lifepodCreated, plugin.getDataFolder() + File.separator + "lifepod.bin");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			save(Base.getBases(), plugin.getDataFolder() + File.separator + "bases.bin");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			save(PlayerProfile.getProfiles(), plugin.getDataFolder() + File.separator + "profiles.bin");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,6 +83,28 @@ public class StateSaver {
 
 			if (file.exists()){
 				SubMC.lifepodCreated  = load(path);
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		try{
+			String path = plugin.getDataFolder() + File.separator + "bases.bin";
+			File file = new File(path);
+
+			if (file.exists()){
+				Base.setBases(load(path));
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		try{
+			String path = plugin.getDataFolder() + File.separator + "profiles.bin";
+			File file = new File(path);
+
+			if (file.exists()){
+				PlayerProfile.setProfiles(load(path));
 			}
 		} catch(Exception e){
 			e.printStackTrace();

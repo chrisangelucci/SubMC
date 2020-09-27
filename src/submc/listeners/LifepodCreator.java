@@ -1,6 +1,5 @@
 package submc.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,9 +7,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.minecraft.server.v1_16_R2.EnumBlockRotation;
-import submc.StructureLoader;
-import submc.SubMC;
 import submc.utils.ItemUtils;
 
 public class LifepodCreator implements Listener{

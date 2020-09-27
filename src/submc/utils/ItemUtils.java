@@ -111,6 +111,10 @@ public class ItemUtils {
 		return easyItemStack("Habitat Builder", Material.BELL, "Fabricates habitat compartments and appliances from raw materials.", amount);
 	}
 	
+	public static ItemStack getStructureMaker(int amount) {
+		return easyItemStack("Structure Maker", Material.WOODEN_AXE, "ADMIN TOOL", amount);
+	}
+	
 	public static ItemStack getRandomLimestoneDrop() {
 		return new Random().nextBoolean() ? getCopperOre(1) : getTitanium(1);
 	}

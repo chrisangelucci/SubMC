@@ -7,27 +7,18 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
 public class CaveRandom {
 
 	public Chunk chunk;
-
-    // Note: Smaller frequencies yield slower change (more stretched out)
-    //   Larger amplitudes yield greater influence on final void
-    // Frequency
     private double f1xz;
     private double f1y;
-    // Density
     private int amplitude1 = 100;
     private double subtractForLessThanCutoff;
-    // Second pass - small noise
     private double f2xz = 0.25;
     private double f2y = 0.05;
     private int amplitude2 = 2;
-    // Third pass - vertical noise
     private double f3xz = 0.025;
     private double f3y = 0.005;
     private int amplitude3 = 20;
-    // Position
     private int caveBandBuffer;
 
-    // Noise
     private NoiseGenerator noiseGen1;
     private NoiseGenerator noiseGen2;
     private NoiseGenerator noiseGen3;
@@ -68,18 +59,14 @@ public class CaveRandom {
     }
 
     private double linearCutoffCoefficient(int y) {
-        // Out of bounds
         if (y < caveBandMin || y > caveBandMax) {
             return subtractForLessThanCutoff;
-            // Bottom layer distortion
         } else if (y >= caveBandMin && y <= caveBandMin + caveBandBuffer) {
             double yy = y - caveBandMin;
             return (-subtractForLessThanCutoff / (double) caveBandBuffer) * yy + subtractForLessThanCutoff;
-            // Top layer distortion
         } else if (y <= caveBandMax && y >= caveBandMax - caveBandBuffer) {
             double yy = y - caveBandMax + caveBandBuffer;
             return (subtractForLessThanCutoff / (double) caveBandBuffer) * yy;
-            // In bounds, no distortion
         } else {
             return 0;
         }

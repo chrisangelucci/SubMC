@@ -5,11 +5,12 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import submc.base.Base;
+import submc.base.HabitatBuilderManager;
 import submc.beacons.BeaconManager;
+import submc.commands.CommandManager;
 import submc.fabricator.FabricatorMain;
 import submc.fabricator.FabricatorRecipe;
-import submc.habitats.HabitatListener;
-import submc.habitats.HabitatManager;
 import submc.listeners.GameruleDefiner;
 import submc.listeners.HarvestableListener;
 import submc.listeners.LifepodCreator;
@@ -17,6 +18,8 @@ import submc.listeners.MachineListener;
 import submc.listeners.SpawnBlocker;
 import submc.oxygen.OxygenManager;
 import submc.slapi.StateSaver;
+import submc.structures.StructureLoader;
+import submc.structures.StructureMaker;
 import submc.utils.ItemUtils;
 import submc.worldgen.OceanGenerator;
 
@@ -24,9 +27,10 @@ public class SubMC extends JavaPlugin{
 	
 	public static boolean lifepodCreated = false;
 	
-	private static HabitatManager habitatManager;
 	private static BeaconManager beaconManager;
 	private static OxygenManager oxygenManager;
+	
+	private static StructureMaker structureMaker;
 	
 	private static StateSaver stateSaver;
 	
@@ -34,9 +38,10 @@ public class SubMC extends JavaPlugin{
 	
 	public void onEnable() {
 		plugin = this;
-		habitatManager = new HabitatManager(this);
+		StructureLoader.loadStructures();
 		beaconManager = new BeaconManager(this);
 		oxygenManager = new OxygenManager(this);
+		structureMaker = new StructureMaker();
 		stateSaver = new StateSaver(this);
 		
 		Bukkit.clearRecipes();
@@ -44,14 +49,13 @@ public class SubMC extends JavaPlugin{
 		registerListeners(getServer().getPluginManager());
 		
 		ItemSinker.sinkItems(this);
+		HabitatBuilderManager.showOutlines(this);
+		Base.update(this);
+		CommandManager.registerCommands();
 	}
 	
 	public void onDisable() {
 		stateSaver.saveState();
-	}
-
-	public static HabitatManager getHabitatManager() {
-		return habitatManager;
 	}
 	
 	public static BeaconManager getBeaconManager() {
@@ -62,6 +66,10 @@ public class SubMC extends JavaPlugin{
 		return oxygenManager;
 	}
 
+	public static StructureMaker getStructureMaker() {
+		return structureMaker;
+	}
+	
 	private void registerRecipes() {
 		new FabricatorRecipe(ItemUtils.getTitaniumIngot(1), ItemUtils.getTitanium(10));
 		new FabricatorRecipe(ItemUtils.getCookedBladderfish(1), ItemUtils.getBladderfish(1));
@@ -82,7 +90,8 @@ public class SubMC extends JavaPlugin{
 		pm.registerEvents(new FabricatorMain(this), this);
 		pm.registerEvents(new LifepodCreator(), this);
 		pm.registerEvents(new GameruleDefiner(), this);
-		pm.registerEvents(new HabitatListener(), this);
+		pm.registerEvents(new HabitatBuilderManager(), this);
+		pm.registerEvents(structureMaker, this);
 	}
 	
 	@Override
